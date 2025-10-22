@@ -395,11 +395,11 @@ The Airbnb Clone backend is built with a modular, scalable architecture that sep
 
 3. **Service Layer**  
    Contains core modules responsible for the main application features:
-   - **User Management** – Handles registration, login, and profile management.
-   - **Property Management** – Manages property listings and search functionalities.
-   - **Booking System** – Handles reservations, availability checks, and booking lifecycle.
-   - **Payment Processing** – Processes transactions securely.
-   - **Review System** – Manages property reviews and ratings.
+   * **User Management** – Handles registration, login, and profile management.
+   * **Property Management** – Manages property listings and search functionalities.
+   * **Booking System** – Handles reservations, availability checks, and booking lifecycle.
+   * **Payment Processing** – Processes transactions securely.
+   * **Review System** – Manages property reviews and ratings.
 
 4. **Database Layer**  
    PostgreSQL stores structured data including users, properties, bookings, payments, and reviews. Indexing and optimized queries ensure high performance.
@@ -430,7 +430,55 @@ graph LR
 
 ---
 
-## 🧩 Next Steps
+## 🔒 API Security
+
+Security is a critical aspect of the Airbnb Clone backend, ensuring that sensitive data, user interactions, and financial transactions remain protected. The following measures are implemented to safeguard the system:
+
+### **1. Authentication**
+
+All users must authenticate using secure methods before accessing protected endpoints. 
+
+* **Implementation:** JSON Web Tokens (JWT) for stateless authentication.  
+* **Importance:** Ensures that only registered users can access their data, preventing unauthorized access to profiles, bookings, or payments.
+
+### **2. Authorization**
+
+Different users have different levels of access based on roles (guest, host, admin).  
+
+* **Implementation:** Role-based access control (RBAC) to restrict actions on resources.  
+* **Importance:** Prevents users from performing actions they are not allowed to (e.g., guests cannot modify property listings).
+
+### **3. Rate Limiting**
+
+API requests are monitored and limited to prevent abuse.  
+
+* **Implementation:** Throttling via Django REST Framework’s rate-limiting features.  
+* **Importance:** Protects the backend from denial-of-service (DoS) attacks and ensures fair usage for all users.
+
+### **4. Data Validation & Sanitization**
+
+All incoming data is validated to prevent malicious input.  
+
+* **Implementation:** Serializer validation in DRF and input sanitization for forms and queries.  
+* **Importance:** Prevents SQL injection, XSS attacks, and ensures the integrity of stored data.
+
+### **5. Secure Payments**
+
+Financial transactions are handled securely with encrypted communication and verified payment gateways.  
+
+* **Implementation:** HTTPS, tokenized payment processing, and secure storage of transaction references (no sensitive card data stored).  
+* **Importance:** Protects users’ financial information and ensures trust in the platform.
+
+### **6. Logging & Monitoring**
+
+All security-related events are logged and monitored.  
+
+* **Implementation:** Centralized logging and alerts for suspicious activities.  
+* **Importance:** Allows early detection of breaches, audit trails, and compliance with security standards.
+
+---
+
+## 🧩 To Do
 
 * Add CI/CD pipelines with GitHub Actions.
 * Deploy to AWS / Render / Railway.
