@@ -188,6 +188,113 @@ The roles below reflect both the project needs and the **recommended team struct
 
 ---
 
+## 🧩 Database Design
+
+The database design forms the backbone of the Airbnb Clone platform, enabling efficient data management, relationships, and scalability.
+This section outlines the key entities, their core fields, and how they interrelate within the system.
+
+### **1. Users**
+
+Represents individuals interacting with the platform — including guests, hosts, and administrators.
+**Key Fields:**
+
+* `id` – Primary key identifying each user.
+* `name` – Full name of the user.
+* `email` – Unique email address for authentication.
+* `role` – Defines user type (guest, host, admin).
+* `created_at` – Timestamp of user registration.
+
+**Relationships:**
+
+* A **user** can list multiple **properties**.
+* A **user** can make multiple **bookings**.
+* A **user** can leave multiple **reviews**.
+
+---
+
+### **2. Properties**
+
+Represents accommodations listed by hosts for booking.
+**Key Fields:**
+
+* `id` – Primary key for the property.
+* `host_id` – Foreign key referencing the user (host).
+* `title` – Title or name of the property.
+* `location` – Address or geographical location.
+* `price_per_night` – Cost per night for booking.
+
+**Relationships:**
+
+* A **property** belongs to a **user (host)**.
+* A **property** can have multiple **bookings** and **reviews**.
+
+---
+
+### **3. Bookings**
+
+Represents reservations made by guests for specific properties.
+**Key Fields:**
+
+* `id` – Primary key for the booking.
+* `user_id` – Foreign key referencing the guest.
+* `property_id` – Foreign key referencing the booked property.
+* `check_in_date` – Booking start date.
+* `check_out_date` – Booking end date.
+
+**Relationships:**
+
+* A **booking** belongs to one **user (guest)**.
+* A **booking** belongs to one **property**.
+* A **booking** can have one **payment record**.
+
+---
+
+### **4. Reviews**
+
+Captures user feedback about properties after stays.
+**Key Fields:**
+
+* `id` – Primary key for the review.
+* `user_id` – Foreign key referencing the reviewer.
+* `property_id` – Foreign key referencing the reviewed property.
+* `rating` – Numerical rating (e.g., 1–5).
+* `comment` – Textual feedback.
+
+**Relationships:**
+
+* A **review** belongs to a **user (guest)**.
+* A **review** belongs to a **property**.
+
+---
+
+### **5. Payments**
+
+Tracks payment transactions for confirmed bookings.
+**Key Fields:**
+
+* `id` – Primary key for the payment.
+* `booking_id` – Foreign key referencing the booking.
+* `amount` – Total payment amount.
+* `payment_method` – Method used (e.g., card, PayPal).
+* `status` – Payment status (e.g., pending, completed, failed).
+
+**Relationships:**
+
+* A **payment** belongs to one **booking**.
+* A **booking** can have one **payment**.
+
+---
+
+### **Entity Relationship Summary**
+
+* **User ↔ Property:** One-to-Many (a host can have multiple properties).
+* **Property ↔ Booking:** One-to-Many (a property can have multiple bookings).
+* **User ↔ Booking:** One-to-Many (a guest can make multiple bookings).
+* **Property ↔ Review:** One-to-Many (a property can have multiple reviews).
+* **Booking ↔ Payment:** One-to-One (each booking has one payment record).
+
+---
+
 ## 🧩 Next Steps
 
 * Add CI/CD pipelines with GitHub Actions.
