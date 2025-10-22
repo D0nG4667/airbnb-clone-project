@@ -478,6 +478,26 @@ All security-related events are logged and monitored.
 
 ---
 
+## ⚙️ CI/CD Pipeline
+
+Continuous Integration (CI) and Continuous Deployment (CD) are essential practices in modern software development that automate testing, building, and deployment of code changes. Implementing CI/CD ensures that new features, bug fixes, and updates are delivered reliably and efficiently, while minimizing human error.
+
+### **Importance for the Airbnb Clone Project**
+
+* **Automated Testing:** Every code change is automatically tested to ensure it does not break existing functionality.  
+* **Faster Deployment:** Approved changes can be deployed to staging or production environments quickly and consistently.  
+* **Code Quality & Consistency:** Enforces coding standards, linting, and validation before merging changes.  
+* **Reduced Human Error:** Automation reduces manual intervention, lowering the risk of misconfigured deployments or missed tests.  
+* **Scalability & Reliability:** Supports multiple developers working concurrently while maintaining a stable production environment.
+
+### **Tools & Technologies**
+
+* **GitHub Actions:** Automates workflows for testing, building, and deployment.  
+* **Docker:** Ensures consistent containerized environments across development, staging, and production.  
+* **Docker Compose:** Manages multi-service dependencies for local development and testing.  
+* **PostgreSQL & Redis:** Services included in CI/CD pipelines for integration testing.  
+* **Optional:** Tools like **Sentry** or **New Relic** can monitor deployments and catch runtime errors.
+
 ## 🧩 To Do
 
 * Add CI/CD pipelines with GitHub Actions.
