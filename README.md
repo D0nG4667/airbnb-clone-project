@@ -295,6 +295,141 @@ Tracks payment transactions for confirmed bookings.
 
 ---
 
+### ERD (Mermaid)
+
+```mermaid
+erDiagram
+    USERS {
+        int id PK
+        string name
+        string email
+        string role
+        datetime created_at
+    }
+    PROPERTIES {
+        int id PK
+        int host_id FK
+        string title
+        string location
+        decimal price_per_night
+    }
+    BOOKINGS {
+        int id PK
+        int user_id FK
+        int property_id FK
+        date check_in_date
+        date check_out_date
+    }
+    PAYMENTS {
+        int id PK
+        int booking_id FK
+        decimal amount
+        string payment_method
+        string status
+    }
+    REVIEWS {
+        int id PK
+        int user_id FK
+        int property_id FK
+        int rating
+        string comment
+    }
+
+    USERS ||--o{ PROPERTIES : "hosts"
+    USERS ||--o{ BOOKINGS : "makes"
+    PROPERTIES ||--o{ BOOKINGS : "has"
+    PROPERTIES ||--o{ REVIEWS : "receives"
+    USERS ||--o{ REVIEWS : "writes"
+    BOOKINGS ||--|| PAYMENTS : "pays"
+```
+
+> **Tip:** If your Markdown viewer doesn't render Mermaid, view the diagram on [mermaid.live](https://mermaid.live/) (paste the diagram block there) or enable Mermaid support in your editor.
+
+---
+
+## 🌟 Feature Breakdown
+
+The Airbnb Clone project incorporates a wide range of core functionalities designed to deliver a seamless experience for both guests and hosts. Each feature reflects essential aspects of a real-world booking platform, ensuring scalability, reliability, and ease of use.
+
+### 👤 User Management
+
+This module enables secure user registration, authentication, and profile management. Users can sign up as guests or hosts, update personal information, and manage their activity within the platform. It forms the foundation for all user-related interactions across the system.
+
+### 🏠 Property Management
+
+Hosts can create, update, and delete property listings with detailed descriptions, pricing, and amenities. This feature allows guests to browse, search, and filter properties based on location, price, and preferences, enhancing discoverability and engagement.
+
+### 📅 Booking System
+
+The booking system allows guests to reserve properties for specific dates, ensuring availability through robust validation. It manages the full reservation lifecycle — from booking creation to check-in and check-out — while maintaining consistency across users and properties.
+
+### 💳 Payment Processing
+
+This feature integrates secure payment gateways to handle transactions related to bookings. It ensures that payment records are accurately stored, verified, and linked to their corresponding bookings, enabling a trustworthy and transparent transaction flow.
+
+### ⭐ Review System
+
+After completing their stays, guests can leave reviews and ratings for properties. This fosters trust within the community, helping future guests make informed decisions while enabling hosts to receive feedback and improve their offerings.
+
+### ⚡ Data Optimization & Performance
+
+To enhance responsiveness, the backend implements database indexing, caching, and optimized query handling. These measures ensure that frequently accessed data — such as property listings or booking details — is retrieved efficiently, providing a smooth user experience.
+
+### 🧠 API Documentation
+
+All backend endpoints are documented using the OpenAPI standard, ensuring clear and consistent API specifications. Additionally, GraphQL support allows flexible data queries, empowering developers and clients to retrieve precisely what they need in a single request.
+
+---
+
+## 🏗️ System Architecture
+
+The Airbnb Clone backend is built with a modular, scalable architecture that separates concerns across different layers and services. This design ensures maintainability, performance, and ease of feature expansion.
+
+### Architecture Overview
+
+1. **Client Layer**  
+   Users interact with the system via web or mobile clients. Clients send requests to the backend through RESTful API endpoints or GraphQL queries.
+
+2. **API Layer**  
+   The Django backend, powered by Django REST Framework (DRF) and GraphQL (Graphene-Django), handles incoming requests. It manages business logic, user authentication, permissions, and data validation.
+
+3. **Service Layer**  
+   Contains core modules responsible for the main application features:
+   - **User Management** – Handles registration, login, and profile management.
+   - **Property Management** – Manages property listings and search functionalities.
+   - **Booking System** – Handles reservations, availability checks, and booking lifecycle.
+   - **Payment Processing** – Processes transactions securely.
+   - **Review System** – Manages property reviews and ratings.
+
+4. **Database Layer**  
+   PostgreSQL stores structured data including users, properties, bookings, payments, and reviews. Indexing and optimized queries ensure high performance.
+
+5. **Caching & Async Layer**  
+   Redis is used for caching frequently accessed data and session management. Celery handles background tasks such as sending notifications and processing asynchronous payments.
+
+6. **External Integrations**  
+   The system can integrate with third-party services such as payment gateways, email services, and analytics platforms, providing additional functionality without compromising core system performance.
+
+### Architecture Diagram (Mermaid)
+
+```mermaid
+graph LR
+    Client[Users: Web & Mobile]
+    API[API Layer: Django + DRF / GraphQL]
+    Service[Service Layer: Users, Properties, Bookings, Payments, Reviews]
+    DB[Database: PostgreSQL]
+    Cache[Cache & Async: Redis + Celery]
+    External[External Services: Payment, Email, Analytics]
+
+    Client --> API
+    API --> Service
+    Service --> DB
+    Service --> Cache
+    Service --> External
+```
+
+---
+
 ## 🧩 Next Steps
 
 * Add CI/CD pipelines with GitHub Actions.
