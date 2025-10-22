@@ -167,13 +167,24 @@ docker-compose exec web pytest
 
 ## 👥 Team Roles
 
-| Role                       | Responsibility                                |
-| -------------------------- | --------------------------------------------- |
-| **Backend Developer**      | API endpoints, models, and business logic     |
-| **Database Administrator** | Database schema, indexing, and optimization   |
-| **DevOps Engineer**        | CI/CD pipelines, Docker, and deployment       |
-| **QA Engineer**            | Testing and quality assurance                 |
-| **Project Lead**           | Architecture, documentation, and coordination |
+A well-structured development team ensures smooth collaboration and clear ownership of responsibilities.
+The roles below reflect both the project needs and the **recommended team structure** from [ITRexGroup](https://itrexgroup.com/blog/software-development-team-structure/).
+
+| **Role**                                     | **Responsibility**                                                                                                                                                                                                                                           |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Backend Developer**                        | Implements core business logic, API endpoints, and database models. Ensures API performance, data integrity, and integration with authentication and payment services. Collaborates with DevOps and QA to maintain code quality and system reliability.      |
+| **Database Administrator (DBA)**             | Designs and maintains the database schema (tables, relationships, indexes). Monitors performance, optimizes queries, ensures data consistency, and manages database backups and migrations.                                                                  |
+| **DevOps Engineer**                          | Handles deployment, monitoring, and scaling using tools like Docker and GitHub Actions. Maintains CI/CD pipelines, manages environment configuration, and ensures system uptime, scalability, and automation.                                                |
+| **QA Engineer**                              | Ensures product quality through automated and manual testing. Verifies business logic, API endpoints, and integrations. Works closely with developers to detect, document, and fix bugs early in the development lifecycle.                                  |
+| **Project Lead / Software Architect**        | Oversees the entire technical direction and ensures architectural consistency across modules. Defines coding standards, reviews pull requests, and facilitates team coordination. Balances trade-offs between scalability, performance, and maintainability. |
+| **Team Coordinator / GitHub Workflow Owner** | Manages GitHub repositories, branching strategy, and code review processes. Enforces consistent documentation (README, API Docs), organizes sprints, and ensures collaboration between roles.                                                                |
+
+---
+
+### 💡 Additional Notes
+
+* This team structure ensures each component of the project — from backend logic to infrastructure and testing — is owned and optimized by a dedicated specialist.
+* According to [ITRexGroup](https://itrexgroup.com/blog/software-development-team-structure/), balanced teams reduce bottlenecks and accelerate delivery by combining complementary expertise across development, QA, and DevOps.
 
 ---
 
@@ -183,4 +194,3 @@ docker-compose exec web pytest
 * Deploy to AWS / Render / Railway.
 * Implement caching, pagination, and rate limiting.
 * Extend GraphQL queries and mutations.
-
