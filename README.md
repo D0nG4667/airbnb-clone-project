@@ -190,157 +190,174 @@ The roles below reflect both the project needs and the **recommended team struct
 
 ## 🧩 Database Design
 
-The database design forms the backbone of the Airbnb Clone platform, enabling efficient data management, relationships, and scalability.
-This section outlines the key entities, their core fields, and how they interrelate within the system.
-
-### **1. Users**
-
-Represents individuals interacting with the platform — including guests, hosts, and administrators.
-**Key Fields:**
-
-* `id` – Primary key identifying each user.
-* `name` – Full name of the user.
-* `email` – Unique email address for authentication.
-* `role` – Defines user type (guest, host, admin).
-* `created_at` – Timestamp of user registration.
-
-**Relationships:**
-
-* A **user** can list multiple **properties**.
-* A **user** can make multiple **bookings**.
-* A **user** can leave multiple **reviews**.
+The database is the backbone of the Airbnb Clone backend, enabling efficient data storage, retrieval, and scalability. This section outlines the design principles, entities, attributes, relationships, normalization, schema details, and indexing strategies.
 
 ---
 
-### **2. Properties**
+### **Database Design Principles**
 
-Represents accommodations listed by hosts for booking.
-**Key Fields:**
+1. **Entity-Relationship (ER) Diagrams**  
+   ER diagrams visually represent entities (tables), attributes (columns), and relationships between entities. They help in understanding data organization and designing a coherent schema.
 
-* `id` – Primary key for the property.
-* `host_id` – Foreign key referencing the user (host).
-* `title` – Title or name of the property.
-* `location` – Address or geographical location.
-* `price_per_night` – Cost per night for booking.
+2. **Normalization**  
+   Normalization organizes data to reduce redundancy and ensure data integrity.  
+   * **1NF:** Ensure atomic values and unique records.  
+   * **2NF:** All non-key attributes fully depend on the primary key.  
+   * **3NF:** Attributes depend only on the primary key.  
 
-**Relationships:**
+3. **Schema Design**  
+   Schema design defines tables, columns, data types, keys, and constraints. It provides a blueprint for database implementation.
 
-* A **property** belongs to a **user (host)**.
-* A **property** can have multiple **bookings** and **reviews**.
-
----
-
-### **3. Bookings**
-
-Represents reservations made by guests for specific properties.
-**Key Fields:**
-
-* `id` – Primary key for the booking.
-* `user_id` – Foreign key referencing the guest.
-* `property_id` – Foreign key referencing the booked property.
-* `check_in_date` – Booking start date.
-* `check_out_date` – Booking end date.
-
-**Relationships:**
-
-* A **booking** belongs to one **user (guest)**.
-* A **booking** belongs to one **property**.
-* A **booking** can have one **payment record**.
+4. **Practical Steps**  
+   * Create ER diagrams using tools like Lucidchart, draw.io, or ERDPlus.  
+   * Normalize tables to remove redundancy.  
+   * Define the schema with primary keys, foreign keys, and constraints.  
+   * Apply indexing to optimize queries.
 
 ---
 
-### **4. Reviews**
+### **Entities & Attributes**
 
-Captures user feedback about properties after stays.
-**Key Fields:**
+**Users**
 
-* `id` – Primary key for the review.
-* `user_id` – Foreign key referencing the reviewer.
-* `property_id` – Foreign key referencing the reviewed property.
-* `rating` – Numerical rating (e.g., 1–5).
-* `comment` – Textual feedback.
+* `user_id`: PK, UUID, Indexed  
+* `first_name`, `last_name`: VARCHAR, NOT NULL  
+* `email`: VARCHAR, UNIQUE, NOT NULL  
+* `password_hash`: VARCHAR, NOT NULL  
+* `phone_number`: VARCHAR, NULL  
+* `role`: ENUM (guest, host, admin), NOT NULL  
+* `created_at`: TIMESTAMP, DEFAULT CURRENT_TIMESTAMP  
 
-**Relationships:**
+**Properties**
 
-* A **review** belongs to a **user (guest)**.
-* A **review** belongs to a **property**.
+* `property_id`: PK, UUID, Indexed  
+* `host_id`: FK → Users(user_id)  
+* `name`, `description`, `location`: NOT NULL  
+* `pricepernight`: DECIMAL, NOT NULL  
+* `created_at`, `updated_at`: TIMESTAMP  
+
+**Bookings**
+
+* `booking_id`: PK, UUID, Indexed  
+* `property_id`: FK → Properties(property_id)  
+* `user_id`: FK → Users(user_id)  
+* `start_date`, `end_date`: DATE, NOT NULL  
+* `total_price`: DECIMAL, NOT NULL  
+* `status`: ENUM (pending, confirmed, canceled), NOT NULL  
+* `created_at`: TIMESTAMP  
+
+**Payments**
+
+* `payment_id`: PK, UUID, Indexed  
+* `booking_id`: FK → Bookings(booking_id)  
+* `amount`: DECIMAL, NOT NULL  
+* `payment_date`: TIMESTAMP, DEFAULT CURRENT_TIMESTAMP  
+* `payment_method`: ENUM (credit_card, paypal, stripe), NOT NULL  
+
+**Reviews**
+
+* `review_id`: PK, UUID, Indexed  
+* `property_id`: FK → Properties(property_id)  
+* `user_id`: FK → Users(user_id)  
+* `rating`: INTEGER, 1–5  
+* `comment`: TEXT, NOT NULL  
+* `created_at`: TIMESTAMP  
+
+**Messages**
+
+* `message_id`: PK, UUID, Indexed  
+* `sender_id`, `recipient_id`: FK → Users(user_id)  
+* `message_body`: TEXT, NOT NULL  
+* `sent_at`: TIMESTAMP  
 
 ---
 
-### **5. Payments**
+### **Constraints**
 
-Tracks payment transactions for confirmed bookings.
-**Key Fields:**
-
-* `id` – Primary key for the payment.
-* `booking_id` – Foreign key referencing the booking.
-* `amount` – Total payment amount.
-* `payment_method` – Method used (e.g., card, PayPal).
-* `status` – Payment status (e.g., pending, completed, failed).
-
-**Relationships:**
-
-* A **payment** belongs to one **booking**.
-* A **booking** can have one **payment**.
+* **Users:** Unique `email`; NOT NULL on required fields.  
+* **Properties:** FK `host_id`; NOT NULL on essential attributes.  
+* **Bookings:** FKs `property_id` and `user_id`; valid ENUM `status`.  
+* **Payments:** FK `booking_id` linked to a valid booking.  
+* **Reviews:** Rating 1–5; FKs on `property_id` and `user_id`.  
+* **Messages:** FKs on `sender_id` and `recipient_id`.  
 
 ---
 
-### **Entity Relationship Summary**
+### **Indexing**
 
-* **User ↔ Property:** One-to-Many (a host can have multiple properties).
-* **Property ↔ Booking:** One-to-Many (a property can have multiple bookings).
-* **User ↔ Booking:** One-to-Many (a guest can make multiple bookings).
-* **Property ↔ Review:** One-to-Many (a property can have multiple reviews).
-* **Booking ↔ Payment:** One-to-One (each booking has one payment record).
+* Primary keys are automatically indexed.  
+* Additional indexes:
+  * `email` in Users  
+  * `property_id` in Properties and Bookings  
+  * `booking_id` in Bookings and Payments  
 
 ---
 
-### ERD (Mermaid)
+### **ER Diagram (Mermaid)**
 
 ```mermaid
 erDiagram
     USERS {
-        int id PK
-        string name
+        UUID user_id PK
+        string first_name
+        string last_name
         string email
-        string role
+        string password_hash
+        string phone_number
+        enum role
         datetime created_at
     }
     PROPERTIES {
-        int id PK
-        int host_id FK
-        string title
+        UUID property_id PK
+        UUID host_id FK
+        string name
+        text description
         string location
-        decimal price_per_night
+        decimal pricepernight
+        datetime created_at
+        datetime updated_at
     }
     BOOKINGS {
-        int id PK
-        int user_id FK
-        int property_id FK
-        date check_in_date
-        date check_out_date
+        UUID booking_id PK
+        UUID property_id FK
+        UUID user_id FK
+        date start_date
+        date end_date
+        decimal total_price
+        enum status
+        datetime created_at
     }
     PAYMENTS {
-        int id PK
-        int booking_id FK
+        UUID payment_id PK
+        UUID booking_id FK
         decimal amount
-        string payment_method
-        string status
+        datetime payment_date
+        enum payment_method
     }
     REVIEWS {
-        int id PK
-        int user_id FK
-        int property_id FK
+        UUID review_id PK
+        UUID property_id FK
+        UUID user_id FK
         int rating
-        string comment
+        text comment
+        datetime created_at
+    }
+    MESSAGES {
+        UUID message_id PK
+        UUID sender_id FK
+        UUID recipient_id FK
+        text message_body
+        datetime sent_at
     }
 
     USERS ||--o{ PROPERTIES : "hosts"
     USERS ||--o{ BOOKINGS : "makes"
     PROPERTIES ||--o{ BOOKINGS : "has"
+    BOOKINGS ||--|| PAYMENTS : "pays"
     PROPERTIES ||--o{ REVIEWS : "receives"
     USERS ||--o{ REVIEWS : "writes"
-    BOOKINGS ||--|| PAYMENTS : "pays"
+    USERS ||--o{ MESSAGES : "sends"
+    USERS ||--o{ MESSAGES : "receives"
 ```
 
 > **Tip:** If your Markdown viewer doesn't render Mermaid, view the diagram on [mermaid.live](https://mermaid.live/) (paste the diagram block there) or enable Mermaid support in your editor.
@@ -436,7 +453,7 @@ Security is a critical aspect of the Airbnb Clone backend, ensuring that sensiti
 
 ### **1. Authentication**
 
-All users must authenticate using secure methods before accessing protected endpoints. 
+All users must authenticate using secure methods before accessing protected endpoints.
 
 * **Implementation:** JSON Web Tokens (JWT) for stateless authentication.  
 * **Importance:** Ensures that only registered users can access their data, preventing unauthorized access to profiles, bookings, or payments.
