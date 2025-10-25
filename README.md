@@ -1,5 +1,8 @@
 # 🏡 Airbnb Clone Backend
 
+**Frontend Repository:**  
+For the frontend implementation of this project, please visit the [Airbnb Clone Frontend Repository](https://github.com/D0nG4667/airbnb-clone-project-frontend).
+
 ## 📖 Overview
 
 The **Airbnb Clone** project is a full-stack backend application designed to replicate the functionality of the popular Airbnb platform. It focuses on building a **robust, scalable, and secure booking system**, where users can list properties, make reservations, process payments, and leave reviews.
